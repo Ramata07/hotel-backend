@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-5##oaskfsz0$m58jj=e5d6$!g6nr3)he4hq=-u-m%4zd!e*!1y'
+SECRET_KEY = os.environ.get(
+    "SECRET_KEY",
+    "django-insecure-5##oaskfsz0$m58jj=e5d6$!g6nr3)he4hq=-u-m%4zd!e*!1y"  # fallback local uniquement
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-
-import os
-
 DEBUG = os.environ.get("DEBUG", "False") == "True"
 
 
@@ -63,12 +64,11 @@ REST_FRAMEWORK = {
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 import cloudinary
-import os
 
 cloudinary.config(
-    cloud_name=os.environ.get("dkywigejd"),
-    api_key=os.environ.get("446735889244741"),
-    api_secret=os.environ.get("yZVf2Q4MbzZReO9m7AST9WM3Hgs")
+    cloud_name=os.environ.get("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.environ.get("CLOUDINARY_API_KEY"),
+    api_secret=os.environ.get("CLOUDINARY_API_SECRET"),
 )
 
 MIDDLEWARE = [
@@ -81,8 +81,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "whitenoise.middleware.WhiteNoiseMiddleware",
-    'django.middleware.security.SecurityMiddleware',
-
 ]
 
 ROOT_URLCONF = 'hotel_projet.urls'
@@ -109,13 +107,12 @@ WSGI_APPLICATION = 'hotel_projet.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 import dj_database_url
-import os
 
-if os.environ.get("postgresql://hotel_db_rxny_user:q6ZgLWBaV4v2P2nR2FTjcD13s9l2QHox@dpg-d630nq7gi27c73bq44gg-a/hotel_db_rxny"):
-    # Production (Render)
+if os.environ.get("DATABASE_URL"):
+    # Production (Render) - PostgreSQL
     DATABASES = {
         'default': dj_database_url.config(
-            default=os.environ.get("postgresql://hotel_db_rxny_user:q6ZgLWBaV4v2P2nR2FTjcD13s9l2QHox@dpg-d630nq7gi27c73bq44gg-a/hotel_db_rxny"),
+            default=os.environ.get("DATABASE_URL"),
             conn_max_age=600
         )
     }
