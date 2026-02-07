@@ -15,16 +15,28 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.http import JsonResponse
 from django.urls import path, include
 
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/', include('hotell.urls')),
-]
+
+def api_root(request):
+    """Page d'accueil de l'API."""
+    return JsonResponse({
+        "message": "API Hotel - Bienvenue",
+        "endpoints": {
+            "admin": "/admin/",
+            "users": "/api/users/",
+            "hotels": "/api/hotels/",
+            "password_reset": "/api/password_reset/",
+        },
+    })
+
 
 urlpatterns = [
+    path('', api_root),
     path('admin/', admin.site.urls),
-    path('api/users/', include('users.urls')), 
+    path('api/', include('hotell.urls')),
+    path('api/users/', include('users.urls')),
     path('api/password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
 ]
 
