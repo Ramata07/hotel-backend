@@ -1,4 +1,5 @@
 from django.db import models
+from cloudinary.models import CloudinaryField
 
 # Create your models here.
 class Hotel(models.Model):
@@ -8,7 +9,7 @@ class Hotel(models.Model):
     numTel = models.CharField(max_length=40)
     prixNuit = models.CharField(max_length=50)
     devise = models.CharField(max_length=200)
-    image = models.ImageField(blank=True, null=True)
+    image = CloudinaryField('image')
 
 
     def __str__(self):
