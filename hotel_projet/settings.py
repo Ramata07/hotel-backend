@@ -191,6 +191,6 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3001",  # pour développement
-    "https://ton-frontend.vercel.app",  # ton futur lien Vercel
+    "http://localhost:3000", 
+    "hotel-frontend-lf9xzl9t2-ramata07s-projects.vercel.app",  
 ]
