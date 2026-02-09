@@ -192,5 +192,5 @@ CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000", 
-    "hotel-frontend-swart-omega.vercel.app",  
+    "https://hotel-frontend-swart-omega.vercel.app",  
 ]
