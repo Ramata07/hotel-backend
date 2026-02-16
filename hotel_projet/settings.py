@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 import os
 import dj_database_url
 from dotenv import load_dotenv
@@ -28,10 +29,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get(
     "SECRET_KEY",
-    "django-insecure-5##oaskfsz0$m58jj=e5d6$!g6nr3)he4hq=-u-m%4zd!e*!1y"  # fallback local uniquement
+    "django-insecure-5##oaskfsz0$m58jj=e5d6$!g6nr3)he4hq=-u-m%4zd!e*!1y"  
 )
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", "True") == "True"
 
 
@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     'hotell',
     'users',
     'rest_framework',
+    'rest_framework_simplejwt',
+    'djoser',
     'django_rest_passwordreset',
     'mysql.connector.django',
     'corsheaders',
@@ -63,7 +65,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-    # ⚠️ AJOUTER les parsers par défaut
+  
     'DEFAULT_PARSER_CLASSES': [
         'rest_framework.parsers.JSONParser',
         'rest_framework.parsers.FormParser',
@@ -71,10 +73,21 @@ REST_FRAMEWORK = {
     ],
 }
 
-
+# JWT Configuration
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': False,
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+}
 
 import cloudinary
-import os
 
 cloudinary.config(
     cloud_name=os.environ.get("CLOUDINARY_CLOUD_NAME"),
@@ -183,16 +196,16 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-#EMAIL_HOST = 'smtp.gmail.com'
-#EMAIL_PORT = 587
-#EMAIL_USE_TLS = True
-#EMAIL_HOST_USER = 'ramata@gmail.com'       # ton adresse Gmail
-#EMAIL_HOST_PASSWORD = 'mdp'   # mot de passe ou mot de passe d'application
-#DEFAULT_FROM_EMAIL = 'ramata@gmail.com'
+EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_USER', 'noreply@hotel.com')
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
@@ -223,3 +236,41 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
 ]
 
+# Djoser Configuration
+# Détecter si on est en production ou en dev
+ENVIRONMENT = os.environ.get("ENVIRONMENT", "production")  # "production" ou "development"
+
+if ENVIRONMENT == "production":
+    FRONTEND_URL = os.environ.get(
+        "FRONTEND_URL",
+        "https://hotel-frontend-swart-omega.vercel.app"
+    )
+    DOMAIN = "hotel-frontend-swart-omega.vercel.app"
+    PROTOCOL = "https"
+else:
+    FRONTEND_URL = "http://localhost:3000"
+    DOMAIN = "localhost:3000"
+    PROTOCOL = "http"
+
+DJOSER = {
+    'LOGIN_FIELD': 'username',
+    'USER_CREATE_PASSWORD_RETYPE': True,
+    'USERNAME_CHANGED_EMAIL_CONFIRMATION': True,
+    'PASSWORD_CHANGED_EMAIL_CONFIRMATION': True,
+    'SEND_CONFIRMATION_EMAIL': True,
+    'SET_PASSWORD_RETYPE': True,
+    'PASSWORD_RESET_CONFIRM_RETYPE': True,
+    'SEND_ACTIVATION_EMAIL': True,
+    'USER_ID_FIELD': 'id',
+    'ACTIVATION_URL': 'activate/{uid}/{token}',
+    'PASSWORD_RESET_CONFIRM_URL': 'password-reset/{uid}/{token}',
+    'DOMAIN': DOMAIN,  # ← Utiliser DOMAIN
+    'PROTOCOL': PROTOCOL,  # ← Utiliser PROTOCOL
+    'PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND': True,
+    'TOKEN_MODEL': None,
+    'SERIALIZERS': {
+        'user_create': 'users.serializers.CustomUserCreateSerializer',
+        'user': 'users.serializers.CustomUserSerializer',
+        'current_user': 'users.serializers.CustomUserSerializer',
+    },
+}

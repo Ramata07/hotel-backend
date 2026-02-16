@@ -1,6 +1,5 @@
 """
 URL configuration for projetHotel project.
-
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/6.0/topics/http/urls/
 Examples:
@@ -17,7 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.http import JsonResponse
 from django.urls import path, include
-
+from djoser.views import UserViewSet
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 def api_root(request):
     """Page d'accueil de l'API."""
@@ -25,18 +25,23 @@ def api_root(request):
         "message": "API Hotel - Bienvenue",
         "endpoints": {
             "admin": "/admin/",
+            "auth": "/auth/",
             "users": "/api/users/",
             "hotels": "/api/hotels/",
-            "password_reset": "/api/password_reset/",
+            "password_reset": "/auth/password-reset/",
         },
     })
-
 
 urlpatterns = [
     path('', api_root),
     path('admin/', admin.site.urls),
+    
+    # API routes
     path('api/', include('hotell.urls')),
-    path('api/users/', include('users.urls')),
-    path('api/password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
+   # path('api/users/', include('users.urls')),
+    
+    # Auth routes - Djoser + JWT
+    path('auth/', include('djoser.urls')),
+    path('auth/', include('djoser.urls.jwt')),
+    
 ]
-
