@@ -198,9 +198,12 @@ STATIC_URL = 'static/'
 
 # Email Configuration avec Resend
 
-EMAIL_BACKEND = 'django_resend.backend.ResendBackend'
-RESEND_API_KEY = os.environ.get('RESEND_API_KEY')
-DEFAULT_FROM_EMAIL = os.environ.get('USER_EMAIL', 'noreply@hotel.com')
+# Email via Resend SMTP
+EMAIL_BACKEND = 'hotel_projet.email_backend.ResendBackend'
+
+DEFAULT_FROM_EMAIL = os.environ.get('USER_EMAIL')
+
+
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
