@@ -224,9 +224,6 @@ CORS_ALLOWED_ORIGINS = [
     "https://hotel-frontend-qhlqwjwsx-ramata07s-projects.vercel.app",  
 ]
 
-CORS_ALLOWED_ORIGIN_REGEXES = [
-    r"^https://.*\.vercel\.app$",  
-]
 
 CORS_ALLOW_HEADERS = [
     'accept',
@@ -241,7 +238,7 @@ CORS_ALLOW_HEADERS = [
 ]
 
 # Djoser Configuration
-# Détecter si on est en production ou en dev
+
 ENVIRONMENT = os.environ.get("ENVIRONMENT", "production")  # "production" ou "development"
 
 if ENVIRONMENT == "production":
