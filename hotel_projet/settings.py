@@ -200,7 +200,6 @@ STATIC_URL = 'static/'
 
 # Email via Resend SMTP
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-'
 
 DEFAULT_FROM_EMAIL = os.environ.get('USER_EMAIL')
 
