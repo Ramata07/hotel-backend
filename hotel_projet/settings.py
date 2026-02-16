@@ -243,9 +243,9 @@ ENVIRONMENT = os.environ.get("ENVIRONMENT", "production")  # "production" ou "de
 if ENVIRONMENT == "production":
     FRONTEND_URL = os.environ.get(
         "FRONTEND_URL",
-        "https://hotel-frontend-swart-omega.vercel.app"
+        "https://hotel-frontend-ramata07s-projects.vercel.app/"
     )
-    DOMAIN = "hotel-frontend-swart-omega.vercel.app"
+    DOMAIN = "hotel-frontend-ramata07s-projects.vercel.app"
     PROTOCOL = "https"
 else:
     FRONTEND_URL = "http://localhost:3000"
