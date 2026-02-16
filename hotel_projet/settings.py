@@ -196,16 +196,11 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
+# Email Configuration avec Resend
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-
-DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_USER', 'noreply@hotel.com')
+EMAIL_BACKEND = 'django_resend.backend.ResendBackend'
+RESEND_API_KEY = os.environ.get('RESEND_API_KEY')
+DEFAULT_FROM_EMAIL = os.environ.get('USER_EMAIL', 'noreply@hotel.com')
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
@@ -218,12 +213,11 @@ MEDIA_ROOT = BASE_DIR / 'media'
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [
-   # "http://localhost:3000",
-  #  "http://127.0.0.1:3000",
+    #"http://localhost:3000",
+    #"http://127.0.0.1:3000",
     "https://hotel-frontend-swart-omega.vercel.app",
     "https://hotel-frontend-qhlqwjwsx-ramata07s-projects.vercel.app",  
 ]
-
 
 CORS_ALLOW_HEADERS = [
     'accept',
@@ -238,7 +232,7 @@ CORS_ALLOW_HEADERS = [
 ]
 
 # Djoser Configuration
-
+# Détecter si on est en production ou en dev
 ENVIRONMENT = os.environ.get("ENVIRONMENT", "production")  # "production" ou "development"
 
 if ENVIRONMENT == "production":
@@ -265,8 +259,8 @@ DJOSER = {
     'USER_ID_FIELD': 'id',
     'ACTIVATION_URL': 'activate/{uid}/{token}',
     'PASSWORD_RESET_CONFIRM_URL': 'password-reset/{uid}/{token}',
-    'DOMAIN': DOMAIN,  # ← Utiliser DOMAIN
-    'PROTOCOL': PROTOCOL,  # ← Utiliser PROTOCOL
+    'DOMAIN': DOMAIN,
+    'PROTOCOL': PROTOCOL,
     'PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND': True,
     'TOKEN_MODEL': None,
     'SERIALIZERS': {
