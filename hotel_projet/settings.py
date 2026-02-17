@@ -199,9 +199,17 @@ STATIC_URL = 'static/'
 # Email Configuration avec Resend
 
 # Email via Resend SMTP
-EMAIL_BACKEND = 'hotel_projet.email_backend.ResendBackend'
-DEFAULT_FROM_EMAIL = os.environ.get('USER_EMAIL')
+# settings.py
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = "smtp-relay.brevo.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True  
+EMAIL_USE_SSL = False
+EMAIL_HOST_USER = os.environ.get("SENDINBLUE_USERNAME")  
+EMAIL_HOST_PASSWORD = os.environ.get("SENDINBLUE_API_KEY") 
+DEFAULT_FROM_EMAIL = 'nianeramata0@gmail.com'
 
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
@@ -235,7 +243,7 @@ CORS_ALLOW_HEADERS = [
 
 # Djoser Configuration
 # Détecter si on est en production ou en dev
-ENVIRONMENT = os.environ.get("ENVIRONMENT", "production")  # "production" ou "development"
+ENVIRONMENT = os.environ.get("ENVIRONMENT", "development")  # "production" ou "development"
 
 if ENVIRONMENT == "production":
     FRONTEND_URL = os.environ.get(
