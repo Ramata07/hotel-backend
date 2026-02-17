@@ -266,6 +266,7 @@ DJOSER = {
     'SET_PASSWORD_RETYPE': True,
     'PASSWORD_RESET_CONFIRM_RETYPE': True,
     'SEND_ACTIVATION_EMAIL': True,
+    'SEND_PASSWORD_RESET_EMAIL': False,
     'USER_ID_FIELD': 'id',
     'ACTIVATION_URL': 'activate/{uid}/{token}',
     'PASSWORD_RESET_CONFIRM_URL': 'password-reset/{uid}/{token}',
