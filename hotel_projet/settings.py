@@ -201,14 +201,14 @@ STATIC_URL = 'static/'
 # Email via Resend SMTP
 # settings.py
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'hotel_projet.brevo_backend.BrevoAPIBackend'
 
-EMAIL_HOST = "smtp-relay.brevo.com"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True  
-EMAIL_USE_SSL = False
-EMAIL_HOST_USER = os.environ.get("SENDINBLUE_USERNAME")  
-EMAIL_HOST_PASSWORD = os.environ.get("SENDINBLUE_API_KEY") 
+#EMAIL_HOST = "smtp-relay.brevo.com"
+#EMAIL_PORT = 587
+#EMAIL_USE_TLS = True  
+#EMAIL_USE_SSL = False
+#EMAIL_HOST_USER = os.environ.get("SENDINBLUE_USERNAME")  
+#EMAIL_HOST_PASSWORD = os.environ.get("SENDINBLUE_API_KEY") 
 DEFAULT_FROM_EMAIL = 'nianeramata0@gmail.com'
 
 
