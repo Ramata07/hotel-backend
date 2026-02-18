@@ -19,6 +19,14 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv(Path(__file__).resolve().parent.parent / '.env')
 
+API_KEY = os.getenv("API_KEY")
+
+if not API_KEY:
+    raise ValueError("API_KEY is not set")
+
+
+print("API KEY:", API_KEY)
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -135,7 +143,7 @@ WSGI_APPLICATION = 'hotel_projet.wsgi.application'
 
 
 if os.environ.get("DATABASE_URL"):
-    # Production (Render) - PostgreSQL
+   
     DATABASES = {
         'default': dj_database_url.config(
             default=os.environ.get("DATABASE_URL"),
@@ -223,9 +231,9 @@ MEDIA_ROOT = BASE_DIR / 'media'
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [
-    #"http://localhost:3000",
+    "http://localhost:3000",
     #"http://127.0.0.1:3000",
-    "https://hotel-frontend-swart-omega.vercel.app",
+    #"https://hotel-frontend-swart-omega.vercel.app",
     #"https://hotel-frontend-qhlqwjwsx-ramata07s-projects.vercel.app",  
 ]
 
@@ -243,7 +251,7 @@ CORS_ALLOW_HEADERS = [
 
 # Djoser Configuration
 # Détecter si on est en production ou en dev
-ENVIRONMENT = os.environ.get("ENVIRONMENT", "production")  # "production" ou "development"
+ENVIRONMENT = os.environ.get("ENVIRONMENT", "development")  # "production" ou "development"
 
 if ENVIRONMENT == "production":
     FRONTEND_URL = os.environ.get(
@@ -280,3 +288,4 @@ DJOSER = {
         'current_user': 'users.serializers.CustomUserSerializer',
     },
 }
+

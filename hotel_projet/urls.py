@@ -38,10 +38,11 @@ urlpatterns = [
     
     # API routes
     path('api/', include('hotell.urls')),
-   # path('api/users/', include('users.urls')),
+   
     
-    # Auth routes - Djoser + JWT
+   
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
+
     
 ]

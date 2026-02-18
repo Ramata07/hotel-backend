@@ -3,6 +3,11 @@ from rest_framework import generics
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from .models import Hotel
 from .serializers import HotelSerializer
+import requests
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.conf import settings
+
 
 logger = logging.getLogger(__name__)
 
@@ -10,7 +15,7 @@ class HotelViewSet(generics.ListCreateAPIView):
     queryset = Hotel.objects.all()
     serializer_class = HotelSerializer
     
-    # ⚠️ CRITIQUE : Ajouter les parsers pour accepter les fichiers
+    
     parser_classes = [MultiPartParser, FormParser, JSONParser]
     
     def get_serializer_context(self):
@@ -35,3 +40,38 @@ class HotelViewSet(generics.ListCreateAPIView):
         print("✅ Hôtel créé:", response.data)
         print("=" * 50)
         return response
+
+@api_view(['POST'])
+def chat_gemini(request):
+    """
+    Vue Django pour interagir avec le chatbot Gemini.
+    Attend un JSON avec { "content": "message utilisateur" }
+    Renvoie { "reply": "réponse du bot" }
+    """
+    user_message = request.data.get("content", "").strip()
+    if not user_message:
+        return Response({"reply": "Veuillez entrer un message."})
+
+    # Endpoint officiel Gemini (Google)
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={settings.API_KEY}"
+
+    payload = {
+        "contents": [
+            {
+                "parts": [{"text": user_message}]
+            }
+        ]
+    }
+
+    try:
+        response = requests.post(url, json=payload)
+        response.raise_for_status()
+        data = response.json()
+
+        # Extraire le texte renvoyé par Gemini
+        reply = data["candidates"][0]["content"]["parts"][0]["text"]
+
+        return Response({"reply": reply})
+
+    except Exception as e:
+        return Response({"reply": f"Erreur du serveur: {str(e)}"})
