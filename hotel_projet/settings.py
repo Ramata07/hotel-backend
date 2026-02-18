@@ -251,7 +251,7 @@ CORS_ALLOW_HEADERS = [
 
 # Djoser Configuration
 # Détecter si on est en production ou en dev
-ENVIRONMENT = os.environ.get("ENVIRONMENT", "development")  # "production" ou "development"
+ENVIRONMENT = os.environ.get("ENVIRONMENT", "production")  # "production" ou "development"
 
 if ENVIRONMENT == "production":
     FRONTEND_URL = os.environ.get(
